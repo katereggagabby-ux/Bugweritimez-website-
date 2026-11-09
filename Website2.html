@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bugweri Times — Breaking News, Business & Analysis</title>
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #111111;
+      --muted-ink: #555555;
+      --light-ink: #130303;
+      --rule-red: #b00000;
+      --paper: #ffffff;
+      --bg-offwhite: #f7f7f5;
+      --border-light: #e2e2e2;
+      --font-serif: 'Georgia', 'Times New Roman', 'Source Serif 4', serif;
+      --font-sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      --max-width: 1280px;
+      --gutter: 16px;
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--bg-offwhite);
+      color: var(--ink);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* ---------- UTILITY ---------- */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .rule-top {
+      border-top: 1px solid var(--rule-red);
+      padding-top: 12px;
+      margin-top: 24px;
+    }
+
+    .rule-top-thin {
+      border-top: 1px solid var(--border-light);
+      padding-top: 8px;
+      margin-top: 16px;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--rule-red);
+      margin-bottom: 6px;
+    }
+
+    .meta {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      letter-spacing: 0.3px;
+      color: var(--light-ink);
+      text-transform: uppercase;
+    }
+
+    /* ---------- HEADER ---------- */
+    .site-header {
+      background: var(--paper);
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      color: var(--muted-ink);
+      letter-spacing: 0.5px;
+    }
+
+    .header-top .date {
+      text-transform: uppercase;
+    }
+
+    .header-top .subscribe-link {
+      font-weight: 600;
+      color: var(--ink);
+      border-bottom: 1px solid var(--rule-red);
+    }
+
+    .masthead-row {
+      text-align: center;
+      padding: 8px 0 4px;
+      position: relative;
+    }
+
+    .masthead {
+      font-family: var(--font-serif);
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    /* Navigation */
+    .nav-bar {
+      border-top: 1px solid var(--border-light);
+      border-bottom: 2px solid var(--ink);
+      padding: 6px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .nav-bar a:hover {
+      color: var(--rule-red);
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0 8px;
+      color: var(--ink);
+    }
+
+    .mobile-nav {
+      display: none;
+      background: var(--paper);
+      border-bottom: 1px solid var(--border-light);
+      padding: 16px 24px;
+    }
+
+    .mobile-nav.is-open {
+      display: block;
+    }
+
+    .mobile-nav ul {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    /* ---------- BREAKING TICKER ---------- */
+    .ticker {
+      background: var(--ink);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      letter-spacing: 0.3px;
+      padding: 6px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-inner {
+      display: inline-block;
+      animation: tickerScroll 28s linear infinite;
+    }
+
+    .ticker-inner span {
+      margin-right: 48px;
+    }
+
+    .ticker-inner strong {
+      color: #ffb3b3;
+      margin-right: 6px;
+    }
+
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ---------- MAIN GRID ---------- */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 32px;
+      padding: 24px 0 40px;
+    }
+
+    /* Hero lead story */
+    .lead-story {
+      margin-bottom: 24px;
+    }
+
+    .lead-story h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.15;
+      letter-spacing: -0.4px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .lead-story .dek {
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--muted-ink);
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .lead-story .byline {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--light-ink);
+      margin-bottom: 12px;
+    }
+
+    .lead-story img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #ddd;
+      margin-bottom: 12px;
+    }
+
+    .lead-story .excerpt {
+      font-size: 15px;
+      color: var(--muted-ink);
+      line-height: 1.55;
+    }
+
+    /* Secondary stories row */
+    .secondary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .secondary-story h3 {
+      font-size: 20px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .secondary-story .dek {
+      font-size: 14px;
+      color: var(--muted-ink);
+      line-height: 1.5;
+    }
+
+    /* More stories list */
+    .more-stories {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .more-stories .story-item {
+      display: grid;
+      grid-template-columns: 1fr 80px;
+      gap: 12px;
+      align-items: start;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .more-stories .story-item:last-child {
+      border-bottom: none;
+    }
+
+    .more-stories .story-item h4 {
+      font-size: 16px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .more-stories .story-item .meta {
+      margin-top: 4px;
+    }
+
+    .more-stories .story-item img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      padding-left: 8px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 28px;
+    }
+
+    .sidebar-section h3 {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .markets-table {
+      width: 100%;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      border-collapse: collapse;
+    }
+
+    .markets-table td {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .markets-table .symbol {
+      font-weight: 700;
+    }
+
+    .markets-table .price {
+      text-align: right;
+    }
+
+    .markets-table .change.positive {
+      color: #1a7a1a;
+    }
+
+    .markets-table .change.negative {
+      color: #b00000;
+    }
+
+    .opinion-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .opinion-list li:last-child {
+      border-bottom: none;
+    }
+
+    .opinion-list .author {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--light-ink);
+      margin-top: 4px;
+    }
+
+    .newsletter-box {
+      background: var(--paper);
+      border: 1px solid var(--border-light);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .newsletter-box h4 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .newsletter-box p {
+      font-size: 13px;
+      color: var(--muted-ink);
+      margin-bottom: 12px;
+    }
+
+    .newsletter-box input {
+      width: 100%;
+      padding: 10px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      border: 1px solid var(--border-light);
+      margin-bottom: 8px;
+    }
+
+    .newsletter-box button {
+      width: 100%;
+      padding: 10px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    .newsletter-box button:hover {
+      background: var(--rule-red);
+    }
+
+    /* ---------- CATEGORY SECTIONS ---------- */
+    .category-section {
+      margin: 32px 0;
+    }
+
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-top: 1px solid var(--ink);
+      padding-top: 12px;
+      margin-bottom: 16px;
+    }
+
+    .category-header h2 {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .category-header .see-all {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--rule-red);
+      font-weight: 600;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .category-card h3 {
+      font-size: 18px;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .category-card .meta {
+      margin-bottom: 6px;
+    }
+
+    .category-card p {
+      font-size: 14px;
+      color: var(--muted-ink);
+      line-height: 1.5;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .site-footer {
+      background: var(--ink);
+      color: #ccc;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      padding: 40px 0 24px;
+      margin-top: 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .footer-col h5 {
+      color: #fff;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 6px;
+    }
+
+    .footer-col ul li a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #333;
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 11px;
+      color: #888;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .sidebar {
+        padding-left: 0;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .nav-bar {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .header-top {
+        font-size: 10px;
+      }
+
+      .secondary-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .more-stories .story-item {
+        grid-template-columns: 1fr 64px;
+      }
+
+      .more-stories .story-item img {
+        width: 64px;
+        height: 48px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .masthead {
+        font-size: 28px;
+      }
+
+      .lead-story h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-top">
+        <span class="date" id="currentDate">Friday, November 7, 2026</span>
+        <a href="#" class="subscribe-link">Subscribe for $1/week</a>
+      </div>
+      <div class="masthead-row">
+        <div class="masthead">Bugweri Times</div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+    <nav class="container">
+      <div class="nav-bar">
+        <a href="#">Home</a>
+        <a href="#">World</a>
+        <a href="#">Uganda</a>
+        <a href="#">Business</a>
+        <a href="#">Markets</a>
+        <a href="#">Tech</a>
+        <a href="#">Opinion</a>
+        <a href="#">Life & Arts</a>
+        <a href="#">Sports</a>
+      </div>
+    </nav>
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">World</a></li>
+        <li><a href="#">Uganda</a></li>
+        <li><a href="#">Business</a></li>
+        <li><a href="#">Markets</a></li>
+        <li><a href="#">Tech</a></li>
+        <li><a href="#">Opinion</a></li>
+        <li><a href="#">Life & Arts</a></li>
+        <li><a href="#">Sports</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- BREAKING TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span><strong>BREAKING</strong> Bugweri District announces new agricultural subsidy program for smallholder farmers</span>
+      <span><strong>MARKETS</strong> Uganda Shilling steady against USD as coffee exports surge 12%</span>
+      <span><strong>WORLD</strong> East African Community summit opens in Arusha with trade focus</span>
+      <span><strong>BREAKING</strong> Bugweri District announces new agricultural subsidy program for smallholder farmers</span>
+      <span><strong>MARKETS</strong> Uganda Shilling steady against USD as coffee exports surge 12%</span>
+      <span><strong>WORLD</strong> East African Community summit opens in Arusha with trade focus</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <div class="main-grid">
+      <!-- LEFT COLUMN: NEWS -->
+      <div class="news-column">
+
+        <!-- Lead Story -->
+        <article class="lead-story">
+          <div class="section-label">Top Story</div>
+          <h1>Bugweri's Coffee Revolution: How Smallholder Farmers Are Reshaping the District's Economy</h1>
+          <p class="dek">A new cooperative model is boosting yields and incomes, but challenges remain in access to financing and global markets.</p>
+          <div class="byline">By Sarah Namukasa | November 7, 2026</div>
+          <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&h=450&fit=crop" alt="Coffee farmers in Bugweri" loading="lazy">
+          <p class="excerpt">In the rolling hills of Bugweri District, a quiet transformation is underway. Smallholder coffee farmers, long constrained by low prices and limited market access, are banding together into cooperatives that are beginning to change the calculus of rural livelihoods. The Bugweri Times spent three days with farmers in Namayingo and Busesa to understand what's working — and what still needs to change.</p>
+        </article>
+
+        <!-- Secondary Stories -->
+        <div class="secondary-row">
+          <article class="secondary-story">
+            <div class="section-label">Uganda</div>
+            <h3>Government Unveils Plan to Expand Rural Electrification in Eastern Uganda</h3>
+            <p class="dek">The Ministry of Energy says new solar mini-grids will reach 45 sub-counties by 2028, targeting schools and health centers first.</p>
+          </article>
+          <article class="secondary-story">
+            <div class="section-label">Business</div>
+            <h3>Mobile Money Transactions Hit Record High as Digital Adoption Accelerates</h3>
+            <p class="dek">Quarterly data from the central bank shows a 23% year-on-year increase, with rural areas driving much of the growth.</p>
+          </article>
+        </div>
+
+        <!-- More Stories -->
+        <div class="more-stories">
+          <div class="section-label">More News</div>
+          <article class="story-item">
+            <div>
+              <h4>Bugweri District Council Approves 2027 Budget with Focus on Roads and Water</h4>
+              <div class="meta">Local Government | 2 hours ago</div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=160&h=120&fit=crop" alt="Council meeting" loading="lazy">
+          </article>
+          <article class="story-item">
+            <div>
+              <h4>New Health Center Opens in Buyanga Sub-county After Years of Advocacy</h4>
+              <div class="meta">Health | 4 hours ago</div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=160&h=120&fit=crop" alt="Health center" loading="lazy">
+          </article>
+          <article class="story-item">
+            <div>
+              <h4>Opinion: Why Bugweri Needs a Public Library — and How We Can Build One</h4>
+              <div class="meta">Opinion | 6 hours ago</div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=160&h=120&fit=crop" alt="Library" loading="lazy">
+          </article>
+          <article class="story-item">
+            <div>
+              <h4>Sports: Bugweri United Secures Promotion to Regional League After Decisive Win</h4>
+              <div class="meta">Sports | 8 hours ago</div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=160&h=120&fit=crop" alt="Football" loading="lazy">
+          </article>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: SIDEBAR -->
+      <aside class="sidebar">
+        <!-- Markets -->
+        <div class="sidebar-section">
+          <h3>Markets</h3>
+          <table class="markets-table">
+            <tr><td class="symbol">USE All Share</td><td class="price">1,245.30</td><td class="change positive">+0.8%</td></tr>
+            <tr><td class="symbol">USD/UGX</td><td class="price">3,782.50</td><td class="change negative">-0.2%</td></tr>
+            <tr><td class="symbol">Coffee (Robusta)</td><td class="price">$2,410</td><td class="change positive">+1.4%</td></tr>
+            <tr><td class="symbol">Gold (oz)</td><td class="price">$2,685</td><td class="change positive">+0.3%</td></tr>
+            <tr><td class="symbol">MTN Uganda</td><td class="price">185.00</td><td class="change positive">+2.1%</td></tr>
+          </table>
+        </div>
+
+        <!-- Opinion -->
+        <div class="sidebar-section">
+          <h3>Opinion</h3>
+          <ul class="opinion-list">
+            <li>
+              The Case for Decentralized Healthcare in Rural Uganda
+              <span class="author">Dr. Joseph Mubiru</span>
+            </li>
+            <li>
+              Why Young People Are Leaving Bugweri — and What We Can Do About It
+              <span class="author">Agnes Nabirye</span>
+            </li>
+            <li>
+              OPINION: The Promise and Peril of AI for African Newsrooms
+              <span class="author">Editorial Board</span>
+            </li>
+            <li>
+              Rethinking Agricultural Extension Services for the 21st Century
+              <span class="author">Prof. David Waiswa</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-box">
+          <h4>The Bugweri Brief</h4>
+          <p>Get the day's top stories delivered to your inbox every morning.</p>
+          <form id="newsletterForm">
+            <input type="email" id="newsletterEmail" placeholder="Your email address" required>
+            <button type="submit">Sign Up</button>
+          </form>
+          <p id="newsletterMsg" style="font-size:11px; margin-top:8px; color:#1a7a1a; display:none;">Thank you for subscribing.</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- CATEGORY SECTIONS -->
+    <section class="category-section">
+      <div class="category-header">
+        <h2>Business & Tech</h2>
+        <a href="#" class="see-all">See All</a>
+      </div>
+      <div class="category-grid">
+        <article class="category-card">
+          <div class="meta">Technology | 3 hours ago</div>
+          <h3>Fintech Startups in Eastern Uganda See Surge in Seed Funding</h3>
+          <p>Investors are increasingly looking beyond Kampala for high-growth opportunities in agri-tech and mobile payments.</p>
+        </article>
+        <article class="category-card">
+          <div class="meta">Economy | 5 hours ago</div>
+          <h3>Trade Ministry Reports Growth in Intra-EAC Exports</h3>
+          <p>Ugandan goods are finding new markets in Rwanda, Kenya, and South Sudan, according to latest trade data.</p>
+        </article>
+        <article class="category-card">
+          <div class="meta">Energy | 7 hours ago</div>
+          <h3>Solar Power Projects Attract New Investment in Busoga Region</h3>
+          <p>Two new mini-grid developers have signed agreements with district governments to expand off-grid access.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="category-section">
+      <div class="category-header">
+        <h2>Life & Culture</h2>
+        <a href="#" class="see-all">See All</a>
+      </div>
+      <div class="category-grid">
+        <article class="category-card">
+          <div class="meta">Arts | 4 hours ago</div>
+          <h3>Local Craft Makers Find New Audiences Through Online Marketplaces</h3>
+          <p>Weavers and potters in Bugweri are using social media to sell directly to customers in Kampala and abroad.</p>
+        </article>
+        <article class="category-card">
+          <div class="meta">Education | 6 hours ago</div>
+          <h3>New Vocational Training Center Opens in Busesa</h3>
+          <p>The center will offer courses in carpentry, tailoring, and computer literacy for youth aged 16–25.</p>
+        </article>
+        <article class="category-card">
+          <div class="meta">Food | 9 hours ago</div>
+          <h3>The Matooke Renaissance: Young Chefs Reimagine a Ugandan Staple</h3>
+          <p>A new generation of cooks is experimenting with traditional ingredients in surprising ways.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h5>Bugweri Times</h5>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Editorial Standards</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Sections</h5>
+          <ul>
+            <li><a href="#">World</a></li>
+            <li><a href="#">Uganda</a></li>
+            <li><a href="#">Business</a></li>
+            <li><a href="#">Opinion</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>More</h5>
+          <ul>
+            <li><a href="#">Newsletters</a></li>
+            <li><a href="#">Podcasts</a></li>
+            <li><a href="#">Archives</a></li>
+            <li><a href="#">Advertise</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Accessibility</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Bugweri Times. All rights reserved.</span>
+        <span>Made in Bugweri, Uganda.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    (function() {
+      // ---------- CURRENT DATE ----------
+      const dateEl = document.getElementById('currentDate');
+      if (dateEl) {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateEl.textContent = now.toLocaleDateString('en-US', options);
+      }
+
+      // ---------- MOBILE MENU TOGGLE ----------
+      const hamburger = document.getElementById('hamburgerBtn');
+      const mobileNav = document.getElementById('mobileNav');
+
+      if (hamburger && mobileNav) {
+        hamburger.addEventListener('click', function() {
+          const isOpen = mobileNav.classList.toggle('is-open');
+          hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+          hamburger.textContent = isOpen ? '✕' : '☰';
+        });
+
+        // Close menu when a link is clicked
+        mobileNav.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            mobileNav.classList.remove('is-open');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.setAttribute('aria-label', 'Open menu');
+            hamburger.textContent = '☰';
+          });
+        });
+
+        // Close menu on window resize if wide
+        window.addEventListener('resize', function() {
+          if (window.innerWidth > 768 && mobileNav.classList.contains('is-open')) {
+            mobileNav.classList.remove('is-open');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.setAttribute('aria-label', 'Open menu');
+            hamburger.textContent = '☰';
+          }
+        });
+      }
+
+      // ---------- NEWSLETTER FORM ----------
+      const form = document.getElementById('newsletterForm');
+      const msg = document.getElementById('newsletterMsg');
+      const emailInput = document.getElementById('newsletterEmail');
+
+      if (form && msg && emailInput) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          if (emailInput.value.trim() !== '') {
+            msg.style.display = 'block';
+            emailInput.value = '';
+            setTimeout(function() {
+              msg.style.display = 'none';
+            }, 4000);
+          }
+        });
+      }
+
+      // ---------- TICKER PAUSE ON HOVER (accessibility) ----------
+      const ticker = document.querySelector('.ticker-inner');
+      if (ticker) {
+        ticker.addEventListener('mouseenter', function() {
+          ticker.style.animationPlayState = 'paused';
+        });
+        ticker.addEventListener('mouseleave', function() {
+          ticker.style.animationPlayState = 'running';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
